@@ -3,8 +3,15 @@
     "name": "Misinformation Checker",
     "version": "1.0",
     "description": "Chrome-tillägg som varnar för misinformation",
-    "permissions": ["activeTab", "scripting"],
+    "permissions": ["scripting"],
+    "host_permissions": ["<all_urls>"],
     "action": {
         "default_popup": "popup.html"
-    }
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ]
 }

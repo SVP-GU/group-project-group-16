@@ -6,34 +6,32 @@ import torch
 app = Flask(__name__)
 CORS(app)
 
-# Bestäm device: kör på CPU för att undvika CUDA-problem i Flask
 device = torch.device('cpu')
 
-# Ladda modellen och tokenizern, och flytta modellen till rätt device
 model_path = 'model/bert_model'
 tokenizer = DistilBertTokenizer.from_pretrained(model_path)
 model = DistilBertForSequenceClassification.from_pretrained(model_path).to(device)
 
-@app.route('/predict', methods=['POST'])
-def predict():
+@app.route('/batch_predict', methods=['POST'])
+def batch_predict():
     data = request.get_json()
-    text = data.get('text', '')
+    texts = data.get('texts', [])
 
-    if not text:
-        return jsonify({'error': 'Ingen text skickades'}), 400
+    if not texts:
+        return jsonify({'error': 'Ingen textlista skickades'}), 400
 
-    # Förbered input och flytta till rätt device
-    inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
-    inputs = {k: v.to(device) for k, v in inputs.items()}
+    flagged_indices = []
+    for i, text in enumerate(texts):
+        inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+        inputs = {k: v.to(device) for k, v in inputs.items()}
 
-    # Gör förutsägelse
-    with torch.no_grad():
-        outputs = model(**inputs)
-        pred = torch.argmax(outputs.logits, dim=1).item()
+        with torch.no_grad():
+            outputs = model(**inputs)
+            pred = torch.argmax(outputs.logits, dim=1).item()
+            if pred == 0:  # 0 = misinformation
+                flagged_indices.append(i)
 
-    label = 'misinformation' if pred == 0 else 'true'
-
-    return jsonify({'prediction': str(pred), 'label': label})
+    return jsonify({'flagged': flagged_indices})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
