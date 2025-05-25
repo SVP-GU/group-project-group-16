@@ -41,22 +41,21 @@ ENV/
 *.sqlite3
 .DS_Store
 
-# Project specific
-fresh-repo/
-grupp_sista (kopia)/
-data_analysis*.png
-trained_models/
-*.joblib
-model/
-results/
-analysis_plots/
-first_training/
-pre_processing_data/
-
-# Large model files
+# Large model files and temporary data
 **/pytorch_model.bin
 **/model.joblib
 **/vectorizer.joblib
 **/*.bin
 **/*.pt
 **/*.pth
+**/bert_model_*/
+fresh-repo/
+data_analysis*.png
+analysis_plots/
+
+# Keep these directories and files
+!extension/
+!app.py
+!model.py
+!requirements.txt
+!README.md
