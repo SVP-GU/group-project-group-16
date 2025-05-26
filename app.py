@@ -81,7 +81,7 @@ MISINFO_DOMAINS = [
 ]
 
 TRUSTED_DOMAINS = [
-    "dn.se", "svd.se", "reuters.com", "bbc.com", "nytimes.com, ur.se"
+    "dn.se", "svd.se", "reuters.com", "bbc.com", "nytimes.com", "ur.se"
 ]
 
 def extract_domain(url):
