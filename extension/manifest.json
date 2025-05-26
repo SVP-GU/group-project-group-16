@@ -1,17 +1,3 @@
-{
-    "manifest_version": 3,
-    "name": "Misinformation Checker",
-    "version": "1.0",
-    "description": "Chrome-tillägg som varnar för misinformation",
-    "permissions": ["scripting"],
-    "host_permissions": ["<all_urls>"],
-    "action": {
-        "default_popup": "popup.html"
-    },
-    "content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "js": ["content.js"]
-        }
-    ]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:b0f367cb88ef501084a5ead6f8ca13d1de7747d4f24f74322266c0cb4f1e5956
+size 418

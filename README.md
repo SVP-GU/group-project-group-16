@@ -8,77 +8,69 @@ Arbetsgång
 
 # Swedish News Disinformation Detector
 
-<<<<<<< HEAD
-## Project Overview
-This project implements a machine learning model for detecting disinformation in Swedish news articles. The model can analyze both Swedish and English text (with automatic translation) to determine if an article is likely to contain disinformation.
+Detta projekt är ett grupparbete som utvecklar en Streamlit-app för att klassificera svenska nyhetsartiklar som trovärdiga eller vilseledande, med hjälp av en fintränad RoBERTa-modell.
 
-=======
-## 🚀 Snabbstart (Quick Start)
+## 🚀 Snabbstart
 
-### 1. Skapa en ny Python-fil
-Skapa en ny fil (t.ex. `check_article.py`) och kopiera in följande kod:
+### 1. Klona repot
+```sh
+git clone https://github.com/SVP-GU/group-project-group-16.git
+cd group-project-group-16
+```
 
+### 2. Installera beroenden
+Vi rekommenderar att använda en virtuell miljö:
+```sh
+pip install -r requirements.txt
+```
+
+### 3. Starta appen
+```sh
+streamlit run app.py --browser.gatherUsageStats false
+```
+Appen öppnas i din webbläsare på [http://localhost:8501](http://localhost:8501).
+
+## 📰 Funktioner
+- Klistra in en nyhetsartikel och analysera dess trovärdighet.
+- Bygger på Hugging Face-modellen [`Mirac1999/roberta-new-classifier-2.0`](https://huggingface.co/Mirac1999/roberta-new-classifier-2.0).
+- Resultat visas direkt i webbläsaren.
+
+## 📊 Modell och Prestanda
+- **Modell:** RoBERTa (XLM-RoBERTa-base) fintränad på svenska nyhetsartiklar
+- **Valideringsresultat:**
+  - Accuracy: 0.76
+  - Macro F1: 0.76
+  - Klass 0 (trovärdig): Precision 0.83, Recall 0.77, F1 0.80
+  - Klass 1 (misinformation): Precision 0.68, Recall 0.75, F1 0.72
+
+## 📚 Dataset
+Modellen är tränad på ett sammansatt dataset av över 38 000 svenska nyhetsartiklar, hämtade från både legitima nyhetskällor och kända desinformationskällor (t.ex. EUvsDisinfo). Datasetet har förbehandlats och balanserats för att förbättra modellens förmåga att särskilja mellan trovärdig och vilseledande information.
+
+## 🛠️ Exempel på användning i kod
+Vill du använda modellen direkt i Python?
 ```python
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 
-def check_news(text):
-    # Ladda modell och tokenizer
-    model = AutoModelForSequenceClassification.from_pretrained("Mirac1999/swedish-news-classifier")
-    tokenizer = AutoTokenizer.from_pretrained("Mirac1999/swedish-news-classifier")
-    
-    # Förbered texten
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=512)
-    
-    # Gör prediktion
-    with torch.no_grad():
-        outputs = model(**inputs)
-        probabilities = torch.softmax(outputs.logits, dim=1)
-        prediction = torch.argmax(probabilities, dim=1).item()
-        confidence = probabilities[0][prediction].item()
-    
-    return {
-        "is_trustworthy": prediction == 1,
-        "confidence": confidence
-    }
+tokenizer = AutoTokenizer.from_pretrained("Mirac1999/roberta-new-classifier-2.0")
+model = AutoModelForSequenceClassification.from_pretrained("Mirac1999/roberta-new-classifier-2.0")
 
-# Exempel på användning
-if __name__ == "__main__":
-    # Testa med en svensk artikel
-    svensk_text = """
-    Sveriges regering meddelade idag nya åtgärder för att bekämpa klimatförändringarna.
-    Beslutet togs efter omfattande diskussioner med experter och miljöorganisationer.
-    """
-    
-    result = check_news(svensk_text)
-    print("\nTest med svensk text:")
-    print(f"Är texten trovärdig? {'Ja' if result['is_trustworthy'] else 'Nej'}")
-    print(f"Konfidens: {result['confidence']:.2%}")
-    
-    # Testa med en engelsk artikel (översätts automatiskt)
-    english_text = """
-    Breaking news: Scientists discover groundbreaking climate change solution.
-    The new method could reverse global warming within years.
-    """
-    
-    result = check_news(english_text)
-    print("\nTest med engelsk text:")
-    print(f"Är texten trovärdig? {'Ja' if result['is_trustworthy'] else 'Nej'}")
-    print(f"Konfidens: {result['confidence']:.2%}")
+text = "Sveriges regering meddelade idag nya åtgärder för att bekämpa klimatförändringarna."
+inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=512)
+with torch.no_grad():
+    outputs = model(**inputs)
+    probabilities = torch.softmax(outputs.logits, dim=1)
+    prediction = torch.argmax(probabilities, dim=1).item()
+    confidence = probabilities[0][prediction].item()
+
+print(f"Trovärdig: {prediction == 1}, Konfidens: {confidence:.2%}")
 ```
 
-### 2. Installera nödvändiga paket
-Öppna en terminal och kör:
-```bash
-pip install transformers torch
-```
+## 🤝 Bidra
+Pull requests och förbättringsförslag välkomnas! Projektet är ett grupparbete inom kursen TIG321 på Göteborgs universitet.
 
-### 3. Kör programmet
-```bash
-python check_article.py
-```
-
-Det är allt! Modellen kommer automatiskt att laddas ner första gången du kör programmet.
+## 📄 Licens
+Se LICENSE-filen i repot.
 
 ## 📊 Modellens Prestanda
 - Accuracy: 77.1%
@@ -134,7 +126,6 @@ The model is trained on a comprehensive dataset of Swedish news articles, includ
 ## Previous Models
 The repository also includes our previous machine learning models based on TF-IDF and traditional ML approaches. These can be found in the legacy code.
 
->>>>>>> d3e4ad8f0d38f246b30f63086fbe26a6bbd9ac2a
 ## Recent Improvements
 
 ### 1. Enhanced Model Performance
