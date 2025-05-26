@@ -110,3 +110,28 @@ if url_input:
     else:
         st.info(f"ℹ️ {domain} finns inte i vår databas – ingen känd flaggning.")
 
+# Ändrar bakgrundsfärg
+st.markdown("""
+    <style>
+    .stApp {
+        background-color: #0f172a;
+        background-image: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        color: #e2e8f0;
+        font-family: 'Segoe UI', sans-serif;
+    }
+    h1, h2, h3 {
+        color: #38bdf8;
+    }
+    .reportview-container .markdown-text-container {
+        font-size: 18px;
+    }
+    .stTextInput>div>div>input {
+        background-color: #1e293b;
+        color: #e2e8f0;
+    }
+    .stButton>button {
+        background-color: #38bdf8;
+        color: #0f172a;
+    }
+    </style>
+""", unsafe_allow_html=True)
