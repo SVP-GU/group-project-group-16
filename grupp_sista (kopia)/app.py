@@ -13,8 +13,8 @@ st.set_page_config(
 @st.cache_resource
 def load_model():
     model_name = "KB/bert-base-swedish-cased-v1"
-    tokenizer = AutoTokenizer.from_pretrained('saved_model')
-    model = AutoModelForSequenceClassification.from_pretrained('saved_model')
+    tokenizer = AutoTokenizer.from_pretrained('../trained_models/model_improved')
+    model = AutoModelForSequenceClassification.from_pretrained('../trained_models/model_improved')
     return model, tokenizer
 
 def predict(text, model, tokenizer):
@@ -36,7 +36,7 @@ def main():
     try:
         model, tokenizer = load_model()
     except Exception as e:
-        st.error("Kunde inte ladda modellen. Kontrollera att modellen är tränad och sparad i 'saved_model' mappen.")
+        st.error(f"Kunde inte ladda modellen. Fel: {str(e)}")
         return
     
     # Textinmatning

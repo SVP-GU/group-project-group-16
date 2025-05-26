@@ -2,6 +2,7 @@ import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
+
 # Konfigurera sidan
 st.set_page_config(
     page_title="Nyhetsartikel Klassificerare",
@@ -12,12 +13,12 @@ st.set_page_config(
 # Ladda modell och tokenizer
 @st.cache_resource
 def load_model():
-    model_name = "KB/bert-base-swedish-cased-v1"
-    tokenizer = AutoTokenizer.from_pretrained('saved_model')
-    model = AutoModelForSequenceClassification.from_pretrained('saved_model')
+    model_name = "model/bert_model"
+    tokenizer = AutoTokenizer.from_pretrained('model/bert_model')
+    model = AutoModelForSequenceClassification.from_pretrained('model/bert_model')
     return model, tokenizer
 
-def predict(text, model, tokenizer):
+def predict(text, model, tokenizer, threshold=0.75):
     """
     Gör en prediktion på given text.
     """
@@ -36,7 +37,7 @@ def main():
     try:
         model, tokenizer = load_model()
     except Exception as e:
-        st.error("Kunde inte ladda modellen. Kontrollera att modellen är tränad och sparad i 'saved_model' mappen.")
+        st.error(f"Kunde inte ladda modellen. Fel: {str(e)}")
         return
     
     # Textinmatning
@@ -53,9 +54,9 @@ def main():
             st.subheader("Resultat")
             
             if trovardig_score > 0.5:
-                st.success(f"Trovärdig artikel ({trovardig_score:.2%} säkerhet)")
+                st.success(f"Denna artikel bör vara sann")
             else:
-                st.error(f"Misinformation ({(1-trovardig_score):.2%} säkerhet)")
+                st.error(f"Denna artikel kan innehålla inslag av misinformation")
         else:
             st.warning("Vänligen klistra in en artikeltext först.")
 

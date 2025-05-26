@@ -1,5 +1,69 @@
+<<<<<<< HEAD
 model/new_model/.DS_Store
 model/bert_model/.DS_Store
 model/.DS_Store
 data/.DS_Store
 .DS_Store
+=======
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# VS Code
+.vscode/
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Logs
+*.log
+
+# Local development
+*.sqlite3
+.DS_Store
+
+# Large model files and temporary data
+**/pytorch_model.bin
+**/model.joblib
+**/vectorizer.joblib
+**/*.bin
+**/*.pt
+**/*.pth
+**/bert_model_*/
+fresh-repo/
+data_analysis*.png
+analysis_plots/
+
+# Keep these directories and files
+!extension/
+!app.py
+!model.py
+!requirements.txt
+!README.md
+>>>>>>> d3e4ad8f0d38f246b30f63086fbe26a6bbd9ac2a

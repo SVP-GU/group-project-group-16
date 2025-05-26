@@ -50,15 +50,38 @@ def compute_metrics(eval_pred):
         'macro_f1': report['macro avg']['f1-score']
     }
 
+def combine_datasets(swedish_csv_path, english_csv_path):
+    """
+    Kombinerar svenskt och engelskt dataset till ett enda dataset.
+    """
+    # Läs in båda dataseten
+    df_sv = pd.read_csv(swedish_csv_path)
+    df_en = pd.read_csv(english_csv_path)
+    
+    print(f"✅ Läste in: {len(df_sv)} svenska artiklar")
+    print(f"✅ Läste in: {len(df_en)} engelska artiklar")
+    
+    # Lägg till en kolumn som indikerar språk
+    df_sv['language'] = 'sv'
+    df_en['language'] = 'en'
+    
+    # Kombinera dataseten
+    df_combined = pd.concat([df_sv, df_en], ignore_index=True)
+    print(f"✅ Totalt antal artiklar efter kombination: {len(df_combined)}")
+    
+    return df_combined
+
 def prepare_data():
     """
-    Förbereder data för träning genom att läsa CSV och dela upp i train/test.
+    Förbereder data för träning genom att läsa och kombinera CSV-filer.
     """
-    # Läs data
+    # Sökvägar till dataseten
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    csv_path = os.path.join(current_dir, 'crawled_articles.csv')
-    df = pd.read_csv(csv_path)
-    print(f"✅ Läste in: {len(df)} artiklar")
+    swedish_csv_path = os.path.join(current_dir, 'cleaned_articles_sv.csv')
+    english_csv_path = os.path.join(current_dir, 'cleaned_articles_en.csv')
+    
+    # Kombinera dataseten
+    df = combine_datasets(swedish_csv_path, english_csv_path)
     
     # Konvertera text till strings och hantera NaN-värden
     df['text'] = df['text'].fillna('').astype(str)
@@ -68,7 +91,8 @@ def prepare_data():
         df['text'].values, 
         df['label'].values, 
         test_size=0.2, 
-        random_state=42
+        random_state=42,
+        stratify=df['label']  # Stratifiera för att behålla klassfördelningen
     )
     
     # Konvertera numpy arrays till listor för att säkerställa rätt format
