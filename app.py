@@ -2,7 +2,6 @@ import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-
 # Konfigurera sidan
 st.set_page_config(
     page_title="Nyhetsartikel Klassificerare",
@@ -13,12 +12,12 @@ st.set_page_config(
 # Ladda modell och tokenizer
 @st.cache_resource
 def load_model():
-    model_name = "model/bert_model"
-    tokenizer = AutoTokenizer.from_pretrained('model/bert_model')
-    model = AutoModelForSequenceClassification.from_pretrained('model/bert_model')
+    model_name = "Mirac1999/swedish-news-classifier"
+    tokenizer = AutoTokenizer.from_pretrained("Mirac1999/swedish-news-classifier")
+    model = AutoModelForSequenceClassification.from_pretrained("Mirac1999/swedish-news-classifier")
     return model, tokenizer
 
-def predict(text, model, tokenizer, threshold=0.75):
+def predict(text, model, tokenizer):
     """
     Gör en prediktion på given text.
     """
@@ -37,7 +36,7 @@ def main():
     try:
         model, tokenizer = load_model()
     except Exception as e:
-        st.error(f"Kunde inte ladda modellen. Fel: {str(e)}")
+        st.error("Kunde inte ladda modellen. Kontrollera att modellen är tränad och sparad i 'saved_model' mappen.")
         return
     
     # Textinmatning
@@ -54,11 +53,60 @@ def main():
             st.subheader("Resultat")
             
             if trovardig_score > 0.5:
-                st.success(f"Denna artikel bör vara sann")
+                st.success(f"Denna artikel har inte flaggats, men tänk på att misinformation även kan spridas subtilt")
             else:
-                st.error(f"Denna artikel kan innehålla inslag av misinformation")
+                st.error(f"Denna artikel har flaggats och kan innehålla misinformation.")
         else:
             st.warning("Vänligen klistra in en artikeltext först.")
 
 if __name__ == "__main__":
     main() 
+
+# -----------------------------
+# Källanalys – domänkontroll
+# -----------------------------
+from urllib.parse import urlparse
+
+MISINFO_DOMAINS = [
+    "swebbtv.se",
+    "friatider.se",
+    "nyheteridag.se",
+    "samnytt.se",
+    "newsvoice.se",
+    "nyatider.nu",
+    "exakt24.se",
+    "dissidenter.se",
+    "projektsanning.com",
+    "mindsverige.se"
+]
+
+TRUSTED_DOMAINS = [
+    "dn.se", "svd.se", "reuters.com", "bbc.com", "nytimes.com, ur.se"
+]
+
+def extract_domain(url):
+    try:
+        return urlparse(url).netloc.replace("www.", "")
+    except Exception:
+        return None
+
+st.subheader("Källanalys – hur trovärdig är länken?")
+st.markdown("🔎 **Tänk på att skriva in din länk i rätt format, t.ex.: `https://www.hemsidan.se`**")
+url_input = st.text_input("Klistra in en nyhetslänk:")
+
+if url_input:
+    domain = extract_domain(url_input)
+    if domain in MISINFO_DOMAINS:
+        st.error(f"⚠️ Varning: {domain} är känd för att sprida misinformation.")
+        st.markdown("""
+                *Domänerna som flaggas är sådana som återkommande förekommer i faktagranskningar och forskningsrapporter från t.ex. **MSB** och **FOI**.  
+                Det betyder inte att allt innehåll på dessa sidor är falskt, utan att de ofta är källor till missvisande eller felaktig information.*
+                """)
+        st.markdown("**Prova istället att läsa från:**")
+        for trusted in TRUSTED_DOMAINS:
+            st.markdown(f"- [https://{trusted}](https://{trusted})")
+    elif domain in TRUSTED_DOMAINS:
+        st.success(f"✅ {domain} är en etablerad och pålitlig källa.")
+    else:
+        st.info(f"ℹ️ {domain} finns inte i vår databas – ingen känd flaggning.")
+
