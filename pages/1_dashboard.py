@@ -125,55 +125,74 @@ Andel personer som sett missvisande information (SCB, 2023)
 
 
 
-# --- RAD 2: Uppdaterad etikettvisualisering ---
+# --- RAD 2: Visualisering av nyhetsfördelning och modellprestanda ---
 st.markdown("---")
 st.markdown("""
 <h3 style='color:#6a1b9a; font-family:Quicksand, sans-serif; font-weight:600;'>
-Analys av vårt uppdaterade dataset – etikettfördelning
+Analys av dataset och modellprestanda
 </h3>
 """, unsafe_allow_html=True)
 
-import matplotlib.pyplot as plt
+col1, col2 = st.columns([1.2, 1])
 
-# Läs in och städa kolumnnamn
-df = pd.read_csv("combined_dataset.csv")
-# Läs in CSV och rensa kolumnnamn
-df = pd.read_csv("combined_dataset.csv")
-df.columns = df.columns.str.strip()  # Viktigt: tar bort dolda mellanslag
+with col1:
+    labels = ['Sanna nyheter', 'Falska/vinklade nyheter']
+    values = [25247, 16542]
+    colors = ['#dfc4f5', '#ba68c8']
 
-# Kontroll: visa kolumnnamnen i terminalen
-print("Kolumnnamn:", df.columns.tolist())
+    fig4, ax4 = plt.subplots(figsize=(6, 4))
+    bars = ax4.bar(labels, values, color=colors, edgecolor='black', linewidth=0.8)
 
-# Alternativ: använd korrekt kolumnnamn direkt
-if 'label' not in df.columns:
-    raise ValueError("Kolumn 'label' hittas inte. Faktiska kolumner är: " + str(df.columns.tolist()))
-# Anpassa sökvägen vid behov
-df.columns = df.columns.str.strip()
+    ax4.set_ylabel("Antal artiklar", fontsize=13, color="#4a148c")
+    ax4.set_title("Fördelning av nyhetstyper i träningsdata", fontsize=14, color="#6a1b9a")
+    ax4.tick_params(colors='#4a148c')
 
-# Etikettdata
-label_counts = df['label'].value_counts().sort_index()
-labels = ['Sanna nyheter', 'Falska/vinklade nyheter']
-values = [label_counts[0], label_counts[1]]
-colors = ['#b3e5fc', '#ba68c8']
+    for bar, val in zip(bars, values):
+        ax4.text(bar.get_x() + bar.get_width() / 2, val + 100, str(val),
+                 ha='center', fontsize=12, color="#4a148c")
 
-# Skapa diagram
-fig, ax = plt.subplots(figsize=(6, 4))
-bars = ax.bar(labels, values, color=colors, edgecolor='black', linewidth=0.8)
+    ax4.set_facecolor('#fdfbff')
+    for spine in ['top', 'right']:
+        ax4.spines[spine].set_visible(False)
+    for spine in ['left', 'bottom']:
+        ax4.spines[spine].set_color('#b39ddb')
 
-ax.set_ylabel("Antal artiklar", fontsize=13, color="#4a148c")
-ax.set_title("Fördelning av nyhetstyper i datasetet", fontsize=14, color="#6a1b9a")
-ax.tick_params(colors='#4a148c')
+    plt.tight_layout()
+    st.pyplot(fig4)
 
-for bar, val in zip(bars, values):
-    ax.text(bar.get_x() + bar.get_width() / 2, val + 100, str(val),
-            ha='center', fontsize=12, color="#4a148c")
+with col2:
+    st.markdown("""
+<div style='color:#6a1b9a; font-family:Quicksand, sans-serif; font-size:16px;'>
+<strong>Klass 0 (Sanna nyheter)</strong><br>
+• Precision: 0.83<br>
+• Recall: 0.77<br>
+• F1-score: 0.80<br>
+• Support: 5050<br><br>
 
-ax.set_facecolor('#fdfbff')
-for spine in ['top', 'right']:
-    ax.spines[spine].set_visible(False)
-for spine in ['left', 'bottom']:
-    ax.spines[spine].set_color('#b39ddb')
+<strong>Klass 1 (Falska nyheter)</strong><br>
+• Precision: 0.68<br>
+• Recall: 0.75<br>
+• F1-score: 0.72<br>
+• Support: 3308<br><br>
 
-plt.tight_layout()
-st.pyplot(fig)
-st.caption(f"Totalt {sum(values)} artiklar analyserade.")
+<strong>Övergripande</strong><br>
+• Accuracy: 0.76<br>
+• Macro avg F1: 0.76<br>
+• Weighted avg F1: 0.76<br>
+• Validation loss: 0.49
+</div>
+""", unsafe_allow_html=True)
+
+
+
+
+    with st.expander("Klicka för att läsa vår analys"):
+        st.markdown("""
+        - **Modellen presterar starkt** på att identifiera *sanna nyheter* (F1: 0.80).
+        - **Falska nyheter** detekteras något svagare (F1: 0.72), men recall är hög (0.75) vilket tyder på att den hittar många av dem.
+        - **Precision för falska nyheter är lägre (0.68)** vilket betyder att vissa felaktigt flaggas.
+        - **Balans i metrik (macro/weighted F1 = 0.76)** visar jämn prestanda över båda klasser.
+        - **Låg valideringsförlust (0.49)** indikerar att modellen generaliserar bra utan att överträna.
+        """)
+
+
