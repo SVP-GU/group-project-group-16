@@ -10,9 +10,5 @@ sentencepiece==0.1.99
 googletrans==3.1.0a0
 joblib
 langdetect==1.0.9
-<<<<<<< HEAD
-imbalanced-learn==0.11.0 
-=======
 imbalanced-learn==0.11.0
 huggingface_hub>=0.19.0 
->>>>>>> d3e4ad8f0d38f246b30f63086fbe26a6bbd9ac2a
