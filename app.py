@@ -12,9 +12,9 @@ st.set_page_config(
 # Ladda modell och tokenizer
 @st.cache_resource
 def load_model():
-    MODEL_NAME = "Mirac1999/roberta-new-classifier-2.0"
-    tokenizer = AutoTokenizer.from_pretrained('Mirac1999/roberta-new-classifier-2.0')
-    model = AutoModelForSequenceClassification.from_pretrained('Mirac1999/roberta-new-classifier-2.0')
+    MODEL_NAME = "Mirac1999/swedish-news-classifier"
+    tokenizer = AutoTokenizer.from_pretrained('Mirac1999/swedish-news-classifier')
+    model = AutoModelForSequenceClassification.from_pretrained('Mirac1999/swedish-news-classifier')
     return model, tokenizer
 
 def predict(text, model, tokenizer):
