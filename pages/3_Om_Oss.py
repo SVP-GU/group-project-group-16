@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("📘 Om oss")
+st.title("Om oss")
 
 st.markdown("""
 Vi är ett studentteam som tillsammans har utvecklat **Källkritikradarn** som en del av vårt projekt inom *socialt entreprenörskap* vid Göteborgs universitet.

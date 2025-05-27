@@ -29,7 +29,7 @@ def predict(text, model, tokenizer):
 
 # Huvudapplikation
 def main():
-    st.title("📰 Nyhetsartikel Klassificerare")
+    st.title("Nyhetsartikel Klassificerare")
     st.write("Klistra in en nyhetsartikel för att analysera dess trovärdighet.")
     
     # Ladda modell
