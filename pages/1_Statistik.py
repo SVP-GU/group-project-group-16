@@ -178,7 +178,6 @@ with col2:
 • Accuracy: 0.76<br>
 • Macro avg F1: 0.76<br>
 • Weighted avg F1: 0.76<br>
-• Validation loss: 0.49
 </div>
 """, unsafe_allow_html=True)
 
