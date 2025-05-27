@@ -5,7 +5,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 # Konfigurera sidan
 st.set_page_config(
     page_title="Nyhetsartikel Klassificerare",
-    page_icon="📰",
+    page_icon="",
     layout="centered"
 )
 
