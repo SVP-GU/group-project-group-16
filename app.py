@@ -77,7 +77,8 @@ MISINFO_DOMAINS = [
     "exakt24.se",
     "dissidenter.se",
     "projektsanning.com",
-    "mindsverige.se"
+    "mindsverige.se",
+    "nordfront.se"
 ]
 
 TRUSTED_DOMAINS = [
