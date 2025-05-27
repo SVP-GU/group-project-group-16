@@ -34,9 +34,7 @@ st.markdown("""
     font-family: "Quicksand", sans-serif;
     font-size: 48px;
     font-weight: 600;
-    background: linear-gradient(to right, #eec8a1, #fde9d5, #f9c998);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #2e2e38;
     margin-bottom: 0.2em;
 '>
 Källkritikradarn
