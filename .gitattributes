@@ -10,6 +10,9 @@ trained_models/**/*.txt filter=lfs diff=lfs merge=lfs -text
 *.bin filter=lfs diff=lfs merge=lfs -text
 *.pt filter=lfs diff=lfs merge=lfs -text
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 trained_models/**/* filter=lfs diff=lfs merge=lfs -text
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
