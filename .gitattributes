@@ -4,3 +4,9 @@ trained_models/**/*.bin filter=lfs diff=lfs merge=lfs -text
 trained_models/**/*.json filter=lfs diff=lfs merge=lfs -text
 trained_models/**/*.txt filter=lfs diff=lfs merge=lfs -text
 **/*.bin filter=lfs diff=lfs merge=lfs -text
+*.pth filter=lfs diff=lfs merge=lfs -text
+*.json filter=lfs diff=lfs merge=lfs -text
+*.txt filter=lfs diff=lfs merge=lfs -text
+*.bin filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
+trained_models/**/* filter=lfs diff=lfs merge=lfs -text
